@@ -115,12 +115,18 @@ class AuthWallNotifier extends ChangeNotifier {
   ///
   Future<void> authorizeRoute(String route,
       [String reason = "Autorização necessária"]) async {
+
+    await askLocalAuth();
+
+
     _authorizedRoutes[route] = await auth.authenticate(
       localizedReason: reason,
       options: const AuthenticationOptions(
         stickyAuth: true,
       ),
     );
+   await dismissLocalAuth();
+
   }
 
   ///
