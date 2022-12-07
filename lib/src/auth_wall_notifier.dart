@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:collection';
 import 'dart:convert';
+import 'dart:core';
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
@@ -97,7 +98,14 @@ class AuthWallNotifier extends ChangeNotifier {
 
   List<BiometricType>? _availableBiometrics;
 
+  List<String>  _authorizedRoutes =[];
 
+  List<String> get authorizedRoutes => _authorizedRoutes;
+
+  ///
+  bool routeIsAuthorized(String route) {
+    return _authorizedRoutes.contains(route);
+  }
 
 
   ///

@@ -137,6 +137,9 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
+              '${context.watch<AuthWallNotifier>().routeIsAuthorized("home")}',
+            ),
+            Text(
               '${context.watch<AuthWallNotifier>().isSupported}',
             ),
             Text(
