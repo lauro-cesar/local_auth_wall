@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:local_auth_wall/local_auth_wall.dart';
+import 'package:local_auth_wall/src/auth_wall_notifier.dart';
+import 'package:provider/provider.dart';
 
 void main() {
   runApp(MyApp());
@@ -11,14 +13,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       builder: (BuildContext,child) {
-
-        return Stack(
-          children: [
-
-          ],
-        );
-
-
+        return LocalAuthWall(
+            isAuthenticating: Container(),
+            ifAuthorizedWidget:child ?? Container(),
+            ifNotAuthorizedWidget:NotAuthorizedState());
         },
         title: 'Flutter Demo',
         theme: ThemeData(
@@ -33,10 +31,8 @@ class MyApp extends StatelessWidget {
           // is not restarted.
           primarySwatch: Colors.blue,
         ),
-        home: LocalAuthWall(
-          isAuthenticating: Container(),
-            ifAuthorizedWidget:MyHomePage(title: 'Flutter Demo Home Page'),
-            ifNotAuthorizedWidget:NotAuthorizedState()));
+        home:MyHomePage(title: 'Flutter Demo Home Page')
+        );
   }
 }
 
@@ -131,7 +127,9 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
+        onPressed: () {
+          context.read<AuthWallNotifier>().askLocalAuth();
+        },
         tooltip: 'Increment',
         child: Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.

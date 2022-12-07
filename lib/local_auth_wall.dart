@@ -4,6 +4,10 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:local_auth/local_auth.dart';
+import 'package:local_auth_wall/src/auth_wall_notifier.dart';
+import 'package:provider/provider.dart';
+
+import 'src/auth_wall_controller.dart';
 
 enum _SupportState {
   unknown,
@@ -36,7 +40,7 @@ class _LocalAuthWallState extends State<LocalAuthWall> {
   List<BiometricType>? _availableBiometrics;
   String _authorized = 'Not Authorized';
   bool _isAuthenticating = false;
-  int activeScreen=0;
+  late AuthWallNotifier authWallNotifier;
 
 
   @override
@@ -44,19 +48,27 @@ class _LocalAuthWallState extends State<LocalAuthWall> {
     // TODO: implement initState
     super.initState();
 
+    setState(() {
+      authWallNotifier = AuthWallNotifier(keyName: "_local_auth_wall_",
+          writeToLocalStorage: false);
+    });
+
+
+
   }
 
 
   @override
   Widget build(BuildContext context) {
-    return IndexedStack(
-      sizing: StackFit.loose,
-        index: activeScreen,
-        children:
- [
-   widget.ifAuthorizedWidget
- ],
-
-        );
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => authWallNotifier),
+      ],
+      child: AuthWallController(
+        isAuthenticating: widget.isAuthenticating,
+        ifAuthorizedWidget: widget.ifAuthorizedWidget,
+        ifNotAuthorizedWidget: widget.ifNotAuthorizedWidget,
+      )
+    );
   }
 }
