@@ -3,6 +3,8 @@ import 'package:local_auth_wall/local_auth_wall.dart';
 import 'package:local_auth_wall/src/auth_wall_notifier.dart';
 import 'package:provider/provider.dart';
 
+
+
 void main() {
   runApp(MyApp());
 }
@@ -12,31 +14,29 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      builder: (BuildContext,child) {
-        return LocalAuthWall(
-             isBooting: Container(
-               color: Colors.blue,
-               alignment: Alignment.center,
-               child: Column(
-                 crossAxisAlignment: CrossAxisAlignment.center,
-                 mainAxisAlignment: MainAxisAlignment.center,
-                 children: [
-                   Text("Dando boot"),
-                   SizedBox(
-                     width: 32,
-                     height: 32,
-                     child: CircularProgressIndicator(),
-                   )
-                 ],
-               ),
-             ),
-            isAuthenticating: Container(
-              color: Colors.amber,
-              alignment: Alignment.center,
-              child: Text("Autenticando"),
-            ),
-            ifAuthorizedWidget:child ?? Container(),
-            ifNotAuthorizedWidget:NotAuthorizedState());
+        builder: (BuildContext, child) {
+          return LocalAuthWall(
+            autoAuthRootRoute: false,
+            defaultRouteName: "root",
+            stateWallWidgets: {
+              "not_authorized":Container(
+                alignment: Alignment.center,
+                child: Column(
+                  children: [
+                    Text("Please authorize root route"),
+                    TextButton(onPressed: () {
+                      context.read<AuthWallNotifier>().authorizeRoute("root");
+                    } , child: Icon(Icons.security))
+                  ],
+                ),
+              ),
+              "root":child ?? Container(
+                alignment: Alignment.center,
+                color: Colors.amber,
+                child: Text("Something is wrong, "
+                  "where is my Home Widget??"),)
+            },
+          );
         },
         title: 'Flutter Demo',
         theme: ThemeData(
@@ -51,8 +51,7 @@ class MyApp extends StatelessWidget {
           // is not restarted.
           primarySwatch: Colors.blue,
         ),
-        home:MyHomePage(title: 'Flutter Demo Home Page')
-        );
+        home: MyHomePage(title: 'Flutter Demo Home Page'));
   }
 }
 
@@ -136,11 +135,13 @@ class _MyHomePageState extends State<MyHomePage> {
           // horizontal).
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            TextButton(onPressed: () {
-              context.read<AuthWallNotifier>().authorizeRoute("home");
-            }, child: Text("Autorizar HOME")),
+            TextButton(
+                onPressed: () {
+                  context.read<AuthWallNotifier>().authorizeRoute("root");
+                },
+                child: Text("Autorizar HOME")),
             Text(
-              '${context.watch<AuthWallNotifier>().routeIsAuthorized("home")}',
+              '${context.watch<AuthWallNotifier>().routeIsAuthorized("root")}',
             ),
             Text(
               '${context.watch<AuthWallNotifier>().isSupported}',

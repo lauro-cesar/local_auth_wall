@@ -1,34 +1,28 @@
 library local_auth_wall;
 
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '/src/auth_wall_notifier.dart';
 import 'src/auth_wall_controller.dart';
 
-
-
 ///
 class LocalAuthWall extends StatefulWidget {
   ///
-  final Widget ifAuthorizedWidget;
-  ///
-  final Widget ifNotAuthorizedWidget;
-  ///
-  final Widget isAuthenticating;
+  final String defaultRouteName;
+
+  /// Register a set of widgets to be
+  final Map<String, Widget> stateWallWidgets;
 
   ///
-  final Widget isBooting;
+  final bool autoAuthRootRoute;
 
   ///
   const LocalAuthWall(
       {Key? key,
-      required this.ifNotAuthorizedWidget,
-      required this.ifAuthorizedWidget,
-      required this.isAuthenticating,
-        required this.isBooting
-      })
+      required this.autoAuthRootRoute,
+      required this.stateWallWidgets,
+      required this.defaultRouteName})
       : super(key: key);
 
   @override
@@ -38,29 +32,24 @@ class LocalAuthWall extends StatefulWidget {
 class _LocalAuthWallState extends State<LocalAuthWall> {
   late AuthWallNotifier authWallNotifier;
 
-
   @override
   void initState() {
     super.initState();
     setState(() {
-      authWallNotifier = AuthWallNotifier(keyName: "_local_auth_wall_",
-          writeToLocalStorage: false)..onBoot();
+      authWallNotifier = AuthWallNotifier(
+          keyName: "_local_auth_wall_",
+          writeToLocalStorage: false,
+          autoAuthRootRoute: widget.autoAuthRootRoute,
+          defaultRouteName: widget.defaultRouteName,
+          initialStateWallWidgets: widget.stateWallWidgets)
+        ..onBoot();
     });
   }
 
-
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (_) => authWallNotifier),
-      ],
-      child: AuthWallController(
-        isBooting: widget.isBooting,
-        isAuthenticating: widget.isAuthenticating,
-        ifAuthorizedWidget: widget.ifAuthorizedWidget,
-        ifNotAuthorizedWidget: widget.ifNotAuthorizedWidget,
-      )
-    );
+    return MultiProvider(providers: [
+      ChangeNotifierProvider(create: (_) => authWallNotifier),
+    ], child: AuthWallController());
   }
 }

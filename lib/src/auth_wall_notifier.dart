@@ -5,6 +5,7 @@ import 'dart:core';
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -49,6 +50,13 @@ class AuthWallNotifier extends ChangeNotifier {
   final Map<String, dynamic> _instanceMap = {};
 
   ///
+  final Map<String, Widget> initialStateWallWidgets;
+
+  ///
+  final String defaultRouteName;
+  ///
+  final bool autoAuthRootRoute;
+  ///
   UnmodifiableMapView<String, dynamic> get instanceMap =>
       UnmodifiableMapView(_instanceMap);
 
@@ -59,6 +67,9 @@ class AuthWallNotifier extends ChangeNotifier {
       this.debugMode,
       this.keepKeys,
       this.excludeKeys,
+        required this.autoAuthRootRoute,
+        required this.defaultRouteName,
+        required this.initialStateWallWidgets,
       this.autoNotify}) {
     ;
     reloadMap().then((_) => {
@@ -102,10 +113,26 @@ class AuthWallNotifier extends ChangeNotifier {
 
   List<BiometricType>? _availableBiometrics;
 
+
+  late Map<String, Widget> _stateWallWidgets;
+  ///
+  ///
+  Map<String, Widget> get stateWallWidgets => _stateWallWidgets;
+
+  ///
+  Future<void> onRegisterWallWidget(Map<String, Widget> widgets) async {
+    _stateWallWidgets.addAll(widgets);
+    notifyListeners();
+  }
+
   late Map<String, bool> _authorizedRoutes;
 
   ///
   Map<String, bool> get authorizedRoutes => _authorizedRoutes;
+
+  ///
+  bool get defaultRouteIsAuthorized => routeIsAuthorized(defaultRouteName);
+
 
   ///
   bool routeIsAuthorized(String route) {
@@ -117,7 +144,6 @@ class AuthWallNotifier extends ChangeNotifier {
       [String reason = "Autorização necessária"]) async {
 
     await askLocalAuth();
-
 
     _authorizedRoutes[route] = await auth.authenticate(
       localizedReason: reason,
