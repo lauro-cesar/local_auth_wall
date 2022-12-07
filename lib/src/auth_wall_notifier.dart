@@ -13,14 +13,19 @@ import 'package:shared_preferences/shared_preferences.dart';
 class AuthWallNotifier extends ChangeNotifier {
   ///
   final String keyName;
+
   ///
   final bool? writeToLocalStorage;
+
   ///
   final bool? debugMode;
+
   ///
   final bool? autoNotify;
+
   ///
   final List<String>? keepKeys;
+
   ///
   final List<String>? excludeKeys;
 
@@ -61,19 +66,15 @@ class AuthWallNotifier extends ChangeNotifier {
         });
   }
 
-
   ///
   Future<void> onBoot() async {
-    _authorizedRoutes ={};
+    _authorizedRoutes = {};
     _isSupported = await _auth.isDeviceSupported();
 
-
     Future.delayed(Duration(seconds: 10), () {
-      _isReady=true;
+      _isReady = true;
       notifyListeners();
     });
-
-
   }
 
   ///
@@ -89,16 +90,17 @@ class AuthWallNotifier extends ChangeNotifier {
 
   ///
   bool _canCheckBiometrics = true;
+
   ///
   bool get canCheckBiometrics => _canCheckBiometrics;
 
   ///
   bool _isSupported = false;
+
   ///
   bool get isSupported => _isSupported;
 
   List<BiometricType>? _availableBiometrics;
-
 
   late Map<String, bool> _authorizedRoutes;
 
@@ -110,23 +112,20 @@ class AuthWallNotifier extends ChangeNotifier {
     return _authorizedRoutes[route] ?? false;
   }
 
-
-
   ///
-  Future<void> authorizeRoute(String route) async {
-
+  Future<void> authorizeRoute(String route,
+      [String reason = "Autorização necessária"]) async {
     _authorizedRoutes[route] = await auth.authenticate(
-      localizedReason: 'Let OS determine authentication method',
+      localizedReason: reason,
       options: const AuthenticationOptions(
         stickyAuth: true,
       ),
     );
-
   }
-
 
   ///
   String _authorized = 'Not Authorized';
+
   ///
   bool _isAuthenticating = false;
 
@@ -138,22 +137,23 @@ class AuthWallNotifier extends ChangeNotifier {
 
   ///
   Future<void> askLocalAuth() async {
-    _showLocalAuth=true;
+    _showLocalAuth = true;
     notifyListeners();
   }
 
   ///
   Future<void> dismissLocalAuth() async {
-    _showLocalAuth=false;
+    _showLocalAuth = false;
     notifyListeners();
   }
 
   Future<Map<String, dynamic>> _onComputeJson(String inputData) async {
     return jsonDecode(inputData);
   }
+
   ///
   Future<Map<String, dynamic>> onComputeJson(String inputData) async {
-    return await compute(_onComputeJson,inputData);
+    return await compute(_onComputeJson, inputData);
   }
 
   ///
@@ -161,22 +161,26 @@ class AuthWallNotifier extends ChangeNotifier {
     final directory = await getApplicationSupportDirectory();
     return directory.path;
   }
+
   ///
   Future<File> sourceFile(String filename) async {
     final path = await localPath;
     return File('$path/$filename');
   }
+
   ///
   Future<File> outPutFile(String filename) async {
     final path = await localPath;
     return File('$path/$filename');
   }
+
   ///
   Future<File> saveData(String data, String filename) async {
     final file = await outPutFile(filename);
     await file.writeAsString('$data');
     return file;
   }
+
   ///
   Future<String> loadFilePath(String filename) async {
     final file = await outPutFile(filename);
@@ -186,22 +190,27 @@ class AuthWallNotifier extends ChangeNotifier {
       return "{}";
     }
   }
+
   ///
   Future<String> loadData(File file) async {
     return await file.readAsString();
   }
+
   ///
   Future<void> reloadMap() async {
     await _loadAppState();
   }
+
   ///
   void onAdd(Map<String, dynamic> values) {
     _instanceMap.addAll(values);
   }
+
   ///
   Future<void> onNotify() async {
     notifyListeners();
   }
+
   ///
   Future<void> onSave() async {
     _saveAppState();
@@ -218,12 +227,14 @@ class AuthWallNotifier extends ChangeNotifier {
     _instanceMap.addAll(values);
     _saveAppState().then((value) => {notifyListeners()});
   }
+
   ///
   Future<void> removeKey(String keyName) async {
     _instanceMap.remove(keyName);
     await _saveAppState();
     notifyListeners();
   }
+
   ///
   Future<void> del(Map<String, dynamic> values) async {
     _instanceMap.remove(values);
@@ -234,7 +245,6 @@ class AuthWallNotifier extends ChangeNotifier {
   Future<void> removeAll() async {
     ///
     var _writeMap = {};
-
 
     for (var key in _keepKeys) {
       _writeMap.addAll(_instanceMap[key]);
@@ -268,7 +278,7 @@ class AuthWallNotifier extends ChangeNotifier {
   Future<void> _saveAppState() async {
     if (writeToLocalStorage ?? true) {
       var sharedPrefs = await SharedPreferences.getInstance();
-      var  _writeMap = {};
+      var _writeMap = {};
       _writeMap.addAll(_instanceMap);
       for (var key in _excludeKeys) {
         _writeMap.remove(key);
