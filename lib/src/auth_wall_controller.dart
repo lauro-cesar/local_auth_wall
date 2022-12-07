@@ -11,13 +11,18 @@ class AuthWallController extends StatelessWidget {
   final Widget ifNotAuthorizedWidget;
   ///
   final Widget isAuthenticating;
+  ///
+  final Widget isBooting;
+
 
   ///
   const AuthWallController(
       {Key? key,
       required this.isAuthenticating,
       required this.ifAuthorizedWidget,
-      required this.ifNotAuthorizedWidget})
+      required this.ifNotAuthorizedWidget,
+      required this.isBooting
+      })
       : super(key: key);
 
   @override
@@ -26,7 +31,8 @@ class AuthWallController extends StatelessWidget {
       primary: false,
       body: Stack(
         children: [
-          ifAuthorizedWidget,
+          (context.watch<AuthWallNotifier>().isReady) ? ifAuthorizedWidget :
+          isBooting,
           AnimatedPositioned(
               right: 0,
               left: 0,

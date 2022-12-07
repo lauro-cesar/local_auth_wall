@@ -14,7 +14,27 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       builder: (BuildContext,child) {
         return LocalAuthWall(
-            isAuthenticating: Container(),
+             isBooting: Container(
+               color: Colors.blue,
+               alignment: Alignment.center,
+               child: Column(
+                 crossAxisAlignment: CrossAxisAlignment.center,
+                 mainAxisAlignment: MainAxisAlignment.center,
+                 children: [
+                   Text("Dando boot"),
+                   SizedBox(
+                     width: 32,
+                     height: 32,
+                     child: CircularProgressIndicator(),
+                   )
+                 ],
+               ),
+             ),
+            isAuthenticating: Container(
+              color: Colors.amber,
+              alignment: Alignment.center,
+              child: Text("Autenticando"),
+            ),
             ifAuthorizedWidget:child ?? Container(),
             ifNotAuthorizedWidget:NotAuthorizedState());
         },
@@ -116,6 +136,9 @@ class _MyHomePageState extends State<MyHomePage> {
           // horizontal).
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            Text(
+              '${context.watch<AuthWallNotifier>().isSupported}',
+            ),
             Text(
               'You have pushed the button this many times:',
             ),

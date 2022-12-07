@@ -1,9 +1,11 @@
+import 'dart:async';
 import 'dart:collection';
 import 'dart:convert';
 import 'dart:io';
+
 import 'package:flutter/foundation.dart';
+import 'package:local_auth/local_auth.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 ///
@@ -56,6 +58,52 @@ class AuthWallNotifier extends ChangeNotifier {
           if (autoNotify ?? true) {notifyListeners()}
         });
   }
+
+
+  ///
+  Future<void> onBoot() async {
+
+    _isSupported = await _auth.isDeviceSupported();
+
+
+    Future.delayed(Duration(seconds: 10), () {
+      _isReady=true;
+      notifyListeners();
+    });
+
+
+  }
+
+  ///
+  final LocalAuthentication _auth = LocalAuthentication();
+
+  ///
+  LocalAuthentication get auth => _auth;
+
+  bool _isReady = false;
+
+  ///
+  bool get isReady => _isReady;
+
+  ///
+  bool _canCheckBiometrics = true;
+  ///
+  bool get canCheckBiometrics => _canCheckBiometrics;
+
+  ///
+  bool _isSupported = false;
+  ///
+  bool get isSupported => _isSupported;
+
+  List<BiometricType>? _availableBiometrics;
+
+
+
+
+  ///
+  String _authorized = 'Not Authorized';
+  ///
+  bool _isAuthenticating = false;
 
   ///
   bool _showLocalAuth = false;
