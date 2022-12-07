@@ -2,10 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:local_auth_wall/local_auth_wall.dart';
 import 'package:local_auth_wall/src/auth_wall_notifier.dart';
 import 'package:provider/provider.dart';
-
-
+import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitDown, DeviceOrientation.portraitUp]);
+
   runApp(MyApp());
 }
 
@@ -16,20 +19,11 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
         builder: (BuildContext, child) {
           return LocalAuthWall(
-            autoAuthRootRoute: false,
+            autoAuthRootRoute: true,
             defaultRouteName: "root",
+            defaultHelpText: "Por favor, autorize o acesso ao app.",
             stateWallWidgets: {
-              "not_authorized":Container(
-                alignment: Alignment.center,
-                child: Column(
-                  children: [
-                    Text("Please authorize root route"),
-                    TextButton(onPressed: () {
-                      context.read<AuthWallNotifier>().authorizeRoute("root");
-                    } , child: Icon(Icons.security))
-                  ],
-                ),
-              ),
+              "not_authorized":NotAuthorizedState(),
               "root":child ?? Container(
                 alignment: Alignment.center,
                 color: Colors.amber,
@@ -61,10 +55,18 @@ class NotAuthorizedState extends StatelessWidget {
     return Scaffold(
       body: Container(
         alignment: Alignment.center,
-        child: Center(
-          child: Text("User not Authorized"),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Text("Please authorize root route"),
+            TextButton(onPressed: () {
+              context.read<AuthWallNotifier>().authorizeRoute("root");
+
+            } , child: Icon(Icons.security))
+          ],
         ),
-      ),
+      )
     );
   }
 }
@@ -134,12 +136,13 @@ class _MyHomePageState extends State<MyHomePage> {
           // axis because Columns are vertical (the cross axis would be
           // horizontal).
           mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             TextButton(
                 onPressed: () {
                   context.read<AuthWallNotifier>().authorizeRoute("root");
                 },
-                child: Text("Autorizar HOME")),
+                child: Text("Autorizar Root")),
             Text(
               '${context.watch<AuthWallNotifier>().routeIsAuthorized("root")}',
             ),
@@ -158,7 +161,8 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          context.read<AuthWallNotifier>().askLocalAuth();
+          context.read<AuthWallNotifier>().authorizeRoute("comprar_item","Por"
+              " favor autorize a transação");
         },
         tooltip: 'Increment',
         child: Icon(Icons.add),

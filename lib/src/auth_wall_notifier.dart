@@ -54,6 +54,7 @@ class AuthWallNotifier extends ChangeNotifier {
 
   ///
   final String defaultRouteName;
+  final String defaultHelpText;
   ///
   final bool autoAuthRootRoute;
   ///
@@ -67,6 +68,7 @@ class AuthWallNotifier extends ChangeNotifier {
       this.debugMode,
       this.keepKeys,
       this.excludeKeys,
+        required this.defaultHelpText,
         required this.autoAuthRootRoute,
         required this.defaultRouteName,
         required this.initialStateWallWidgets,
@@ -80,12 +82,15 @@ class AuthWallNotifier extends ChangeNotifier {
   ///
   Future<void> onBoot() async {
     _authorizedRoutes = {};
+    _stateWallWidgets.addAll(initialStateWallWidgets);
     _isSupported = await _auth.isDeviceSupported();
 
-    Future.delayed(Duration(seconds: 10), () {
-      _isReady = true;
-      notifyListeners();
-    });
+    if(autoAuthRootRoute){
+      await authorizeRoute(defaultRouteName, defaultHelpText);
+    }
+    _isReady = true;
+    notifyListeners();
+
   }
 
   ///
@@ -114,7 +119,8 @@ class AuthWallNotifier extends ChangeNotifier {
   List<BiometricType>? _availableBiometrics;
 
 
-  late Map<String, Widget> _stateWallWidgets;
+  ///
+  Map<String, Widget> _stateWallWidgets = {};
   ///
   ///
   Map<String, Widget> get stateWallWidgets => _stateWallWidgets;
@@ -143,15 +149,18 @@ class AuthWallNotifier extends ChangeNotifier {
   Future<void> authorizeRoute(String route,
       [String reason = "Autorização necessária"]) async {
 
-    await askLocalAuth();
 
-    _authorizedRoutes[route] = await auth.authenticate(
-      localizedReason: reason,
-      options: const AuthenticationOptions(
-        stickyAuth: true,
-      ),
-    );
-   await dismissLocalAuth();
+    if(isSupported){
+      await askLocalAuth();
+      _authorizedRoutes[route] = await auth.authenticate(
+        localizedReason: reason,
+        options: const AuthenticationOptions(
+          stickyAuth: true,
+        ),
+      );
+      await dismissLocalAuth();
+    }
+
 
   }
 

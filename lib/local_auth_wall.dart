@@ -11,6 +11,9 @@ class LocalAuthWall extends StatefulWidget {
   ///
   final String defaultRouteName;
 
+  ///
+  final String defaultHelpText;
+
   /// Register a set of widgets to be
   final Map<String, Widget> stateWallWidgets;
 
@@ -22,6 +25,7 @@ class LocalAuthWall extends StatefulWidget {
       {Key? key,
       required this.autoAuthRootRoute,
       required this.stateWallWidgets,
+        required this.defaultHelpText,
       required this.defaultRouteName})
       : super(key: key);
 
@@ -39,6 +43,7 @@ class _LocalAuthWallState extends State<LocalAuthWall> {
       authWallNotifier = AuthWallNotifier(
           keyName: "_local_auth_wall_",
           writeToLocalStorage: false,
+          defaultHelpText: widget.defaultHelpText,
           autoAuthRootRoute: widget.autoAuthRootRoute,
           defaultRouteName: widget.defaultRouteName,
           initialStateWallWidgets: widget.stateWallWidgets)

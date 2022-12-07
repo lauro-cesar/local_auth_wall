@@ -1,5 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="app.sharedway.local_auth_wall_example">
+
+    <uses-permission android:name="android.permission.USE_BIOMETRIC"/>
+
    <application
         android:label="local_auth_wall_example"
         android:icon="@mipmap/ic_launcher">
