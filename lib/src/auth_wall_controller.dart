@@ -57,6 +57,7 @@ class AuthWallController extends StatelessWidget {
                             },
                             icon: const Icon(Icons.expand_circle_down),
                             color: Colors.blue),
+
                       ],
                     ),
                   ),

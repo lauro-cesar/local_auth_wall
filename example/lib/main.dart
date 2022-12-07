@@ -136,6 +136,9 @@ class _MyHomePageState extends State<MyHomePage> {
           // horizontal).
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            TextButton(onPressed: () {
+              context.read<AuthWallNotifier>().authorizeRoute("home");
+            }, child: Text("Autorizar HOME")),
             Text(
               '${context.watch<AuthWallNotifier>().routeIsAuthorized("home")}',
             ),

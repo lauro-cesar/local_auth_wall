@@ -55,6 +55,7 @@ class AuthWallNotifier extends ChangeNotifier {
       this.keepKeys,
       this.excludeKeys,
       this.autoNotify}) {
+    ;
     reloadMap().then((_) => {
           if (autoNotify ?? true) {notifyListeners()}
         });
@@ -63,7 +64,7 @@ class AuthWallNotifier extends ChangeNotifier {
 
   ///
   Future<void> onBoot() async {
-
+    _authorizedRoutes ={};
     _isSupported = await _auth.isDeviceSupported();
 
 
@@ -98,13 +99,29 @@ class AuthWallNotifier extends ChangeNotifier {
 
   List<BiometricType>? _availableBiometrics;
 
-  List<String>  _authorizedRoutes =[];
 
-  List<String> get authorizedRoutes => _authorizedRoutes;
+  late Map<String, bool> _authorizedRoutes;
+
+  ///
+  Map<String, bool> get authorizedRoutes => _authorizedRoutes;
 
   ///
   bool routeIsAuthorized(String route) {
-    return _authorizedRoutes.contains(route);
+    return _authorizedRoutes[route] ?? false;
+  }
+
+
+
+  ///
+  Future<void> authorizeRoute(String route) async {
+
+    _authorizedRoutes[route] = await auth.authenticate(
+      localizedReason: 'Let OS determine authentication method',
+      options: const AuthenticationOptions(
+        stickyAuth: true,
+      ),
+    );
+
   }
 
 
