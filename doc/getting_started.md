@@ -8,7 +8,7 @@ Local Auth wall redirect user to a widget when  authenticated and another if not
 
 ```
 import 'package:flutter/material.dart';
-import 'package:local_auth_wall/wall.dart';
+import 'package:local_auth_wall/local_auth_wall.dart';
 
 void main() {
   runApp(MyApp());
