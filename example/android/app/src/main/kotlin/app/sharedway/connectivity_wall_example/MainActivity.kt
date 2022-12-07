@@ -1,4 +1,4 @@
-package app.sharedway.connectivity_wall_example
+package app.sharedway.local_auth_wall_example
 
 import io.flutter.embedding.android.FlutterActivity
 

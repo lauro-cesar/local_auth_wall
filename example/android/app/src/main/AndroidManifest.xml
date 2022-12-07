@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="app.sharedway.connectivity_wall_example">
+    package="app.sharedway.local_auth_wall_example">
    <application
-        android:label="connectivity_wall_example"
+        android:label="local_auth_wall_example"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
