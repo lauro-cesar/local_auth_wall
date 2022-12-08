@@ -56,21 +56,136 @@ package="com.example.app">
 
 ```
 
+## Usage example:
+
+
 
 
 ```
 import 'package:flutter/material.dart';
 import 'package:local_auth_wall/local_auth_wall.dart';
+import 'package:local_auth_wall/src/auth_wall_notifier.dart';
+import 'package:provider/provider.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitDown, DeviceOrientation.portraitUp]);
+
   runApp(MyApp());
 }
 
+/// Widget to show when Not Authorized
+class NotAuthorizedState extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        body: Container(
+          color: Colors.blue,
+          alignment: Alignment.center,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text("Please authorize to access"),
+              TextButton(onPressed: () {
+                context.read<AuthWallNotifier>().authorizeRoute("root","pleas"
+                    "e authorize to access");
+              } , child: Icon(Icons.security))
+            ],
+          ),
+        )
+    );
+  }
+}
+
+///
+class OnBootState extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        body: Container(
+          alignment: Alignment.center,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text("Please wait, checking for hardware support  "),
+              TextButton(onPressed: () {
+                ///Call here action here..
+              } , child: Icon(Icons.security))
+            ],
+          ),
+        )
+    );
+  }
+}
+
+
+/// Widget to show when hardware requirements not meet...
+class NotSupportedState extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        body: Container(
+          alignment: Alignment.center,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text("Sorry, this device is not supported, please, auth using "
+                  "the below alternative."),
+              TextButton(onPressed: () {
+               ///Call here...
+              } , child: Icon(Icons.security))
+            ],
+          ),
+        )
+    );
+  }
+}
+
+
+
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
+  /// String to define the defaultRoute (Anytime wee can use context.read<AuthWallNotifier>().
+  routeIsAuthorized
+  (routeName) to check the authorization state (bool)
+  final String defaultRouteName = "root";
+
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+        builder: (BuildContext, child) {
+          return LocalAuthWall(
+          /// minimal set of conf required, this way is           
+            appConf: {
+              AuthWallConfProperty.defaultHelpText:"Please, authorize to "
+                  "access.",
+              AuthWallConfProperty.autoAuthRootRoute:true,
+              AuthWallConfProperty.resetRootRouteOnAnyUnAuthorized:false,
+              AuthWallConfProperty.defaultRouteName:defaultRouteName,
+            },
+            stateWallWidgets: {
+            /// A nice Widget to show while checking for hardware support...
+              "${AuthWallDefaultStates.booting}":OnBootState(),
+              /// A nice Widget to show if Authorized.
+              "${AuthWallDefaultStates.unauthorized}":NotAuthorizedState(),
+              /// A nice Widget to show when local_auth its unsupported. 
+              "${AuthWallDefaultStates.unsupported}":NotSupportedState(),
+              /// child here provided by Flutter MaterialApp, normally the
+              /// home route, in this case: MyHomePage
+              /// root must match defaultRouteName
+              defaultRouteName:child ?? Container(
+                alignment: Alignment.center,
+                color: Colors.amber,
+                child: Text("Something is wrong, "
+                  "where is my Home Widget??"),)
+            },
+          );
+        },
         title: 'Flutter Demo',
         theme: ThemeData(
           // This is the theme of your application.
@@ -84,25 +199,10 @@ class MyApp extends StatelessWidget {
           // is not restarted.
           primarySwatch: Colors.blue,
         ),
-        home: LocalAuthWall(
-        ifAuthorizedWidget:MyHomePage(title: 'Flutter Demo Home Page'),
-        ifNotAuthorizedWidget:NotAuthorizedState());
+        home: MyHomePage(title: 'Flutter Demo Home Page'));
   }
 }
 
-class NotAuthorizedState extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        alignment: Alignment.center,
-        child: Center(
-          child: Text("User not Authorized"),
-        ),
-      ),
-    );
-  }
-}
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key? key, this.title}) : super(key: key);
@@ -169,7 +269,21 @@ class _MyHomePageState extends State<MyHomePage> {
           // axis because Columns are vertical (the cross axis would be
           // horizontal).
           mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
+          (!context.watch<AuthWallNotifier>().routeIsAuthorized("root"))?
+            TextButton(
+                onPressed: () {
+                  context.read<AuthWallNotifier>().authorizeRoute("root");
+                },
+                child: Text("Autorizar Root")) : Container(),
+               
+            Text(
+              '${context.watch<AuthWallNotifier>().routeIsAuthorized("root")}',
+            ),
+            Text(
+              '${context.watch<AuthWallNotifier>().isSupported}',
+            ),
             Text(
               'You have pushed the button this many times:',
             ),
@@ -180,13 +294,19 @@ class _MyHomePageState extends State<MyHomePage> {
           ],
         ),
       ),
+      /// Test for a diferent route
       floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
+        onPressed: () {
+            /// "wallet_ballance" is just a tag, you can ask to authorize anything.
+          context.read<AuthWallNotifier>().authorizeRoute("wallet_ballance","Please, authorize 
+          to see your balance");
+        },
         tooltip: 'Increment',
         child: Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
+
 
 ```
