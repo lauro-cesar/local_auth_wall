@@ -89,6 +89,7 @@ class NotAuthorizedState extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        primary: false,
         body: Container(
           color: Colors.blue,
           alignment: Alignment.center,
@@ -113,6 +114,7 @@ class OnBootState extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        primary: false,
         body: Container(
           alignment: Alignment.center,
           child: Column(
@@ -136,6 +138,7 @@ class NotSupportedState extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        primary: false,
         body: Container(
           alignment: Alignment.center,
           child: Column(
@@ -157,9 +160,8 @@ class NotSupportedState extends StatelessWidget {
 
 
 class MyApp extends StatelessWidget {
-  /// String to define the defaultRoute (Anytime wee can use context.read<AuthWallNotifier>().
-  routeIsAuthorized
-  (routeName) to check the authorization state (bool)
+  /// String to define the defaultRoute (Anytime wee can use context.read<AuthWallNotifier>().routeIsAuthorized(routeName) to check the authorization state (bool)
+
   final String defaultRouteName = "root";
 
 
