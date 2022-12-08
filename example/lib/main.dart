@@ -109,7 +109,6 @@ class MyApp extends StatelessWidget {
               AuthWallDefaultStates.unsupported: NotSupportedState(),
               /// child here provided by Flutter MaterialApp, normally the
               /// home route, in this case: MyHomePage
-              /// root must match defaultRouteName
               AuthWallDefaultStates.defaultRoute: child ??
                   Container(
                     alignment: Alignment.center,
