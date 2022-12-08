@@ -109,7 +109,7 @@ MaterialApp(
 ```
 
 
-## Complete example
+## Complete example (see the Example app)
 
 ```dart
 import 'package:flutter/material.dart';
