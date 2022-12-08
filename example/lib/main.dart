@@ -54,12 +54,7 @@ class OnBootState extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text("Please wait, checking for hardware support  "),
-              TextButton(
-                  onPressed: () {
-                    ///Call here action here..
-                  },
-                  child: Icon(Icons.security))
+              Text("Please wait,"),
             ],
           ),
         ));

@@ -17,7 +17,7 @@ class AuthWallOverlayController extends StatelessWidget {
         AnimatedPositioned(
             right: 0,
             left: 0,
-            top: (!context.watch<AuthWallNotifier>().showLocalAuth)
+            top: (context.watch<AuthWallNotifier>().showLocalAuth)
                 ? 0
                 : (MediaQuery.of(context).size.height),
             bottom: 0,
@@ -27,25 +27,29 @@ class AuthWallOverlayController extends StatelessWidget {
               color: Colors.black.withOpacity(0.5),
               alignment: Alignment.bottomCenter,
               child: SizedBox(
-                height: MediaQuery.of(context).size.height * 0.5,
+                height: MediaQuery.of(context).size.height * 0.3,
                 child: Container(
                   color: Colors.white,
                   alignment: Alignment.center,
                   child: Column(
                     children: [
                       SizedBox(
-                        height: 12,
-                        width:MediaQuery.of(context).size.width,
+                        height: 48,
+                        width: 48,
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child: LinearProgressIndicator(),
+                          child: CircularProgressIndicator(),
                         ),
                       ),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: IconButton(onPressed: () {
-                          context.read<AuthWallNotifier>().dismissLocalAuth();
-                        }, icon: Icon(Icons.cancel)),
+                        child: IconButton(
+                            onPressed: () {
+                              context
+                                  .read<AuthWallNotifier>()
+                                  .dismissLocalAuth();
+                            },
+                            icon: Icon(Icons.cancel)),
                       )
                     ],
                   ),

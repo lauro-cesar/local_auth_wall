@@ -13,12 +13,10 @@ class AuthWallController extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-    if(context.watch<AuthWallNotifier>().defaultRouteIsAuthorized) {
+    if (context.watch<AuthWallNotifier>().defaultRouteIsAuthorized) {
       return context.watch<AuthWallNotifier>().rootWidget;
     }
 
-    return context
-        .watch<AuthWallNotifier>().unauthorizedWidget;
+    return context.watch<AuthWallNotifier>().unauthorizedWidget;
   }
 }

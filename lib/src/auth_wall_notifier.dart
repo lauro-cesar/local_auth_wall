@@ -92,9 +92,11 @@ class AuthWallNotifier extends ChangeNotifier {
   ///
   Future<void> onBoot() async {
     _authorizedRoutes = {};
+    _stateWallWidgets = {};
     _stateWallWidgets.addAll(initialStateWallWidgets);
     notifyListeners();
     _isSupported = await _auth.isDeviceSupported();
+    notifyListeners();
 
     if (autoAuthRootRoute) {
       await authorizeRoute(
@@ -186,6 +188,8 @@ class AuthWallNotifier extends ChangeNotifier {
       } else {
         if (resetRootRouteOnAnyUnAuthorized) {
           _authorizedRoutes.clear();
+        } else {
+          _authorizedRoutes.remove(route);
         }
       }
       await dismissLocalAuth();

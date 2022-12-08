@@ -10,14 +10,12 @@ class AuthWallBootController extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-    if(context.watch<AuthWallNotifier>().isReady){
+    if (context.watch<AuthWallNotifier>().isReady) {
       /// Lets test device capabilities.
       return UnsupportedAuthWallController();
     }
+
     /// while on boot, show a nice loading screen
-    return context
-        .watch<AuthWallNotifier>()
-        .bootingWidget;
+    return context.watch<AuthWallNotifier>().bootingWidget;
   }
 }
