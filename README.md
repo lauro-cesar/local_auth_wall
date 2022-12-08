@@ -25,7 +25,7 @@ If you are using FlutterActivity directly, change it to FlutterFragmentActivity 
 
 If you are using a custom activity, update your MainActivity.java:
 
-```
+```java
     import io.flutter.embedding.android.FlutterFragmentActivity;
     public class MainActivity extends FlutterFragmentActivity {
           // ...
@@ -34,7 +34,7 @@ If you are using a custom activity, update your MainActivity.java:
      
 or MainActivity.kt:
 
-```java
+```kotlin
       import io.flutter.embedding.android.FlutterFragmentActivity
 
       class MainActivity: FlutterFragmentActivity() {
