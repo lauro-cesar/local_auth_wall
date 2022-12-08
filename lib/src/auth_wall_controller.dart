@@ -19,6 +19,7 @@ class AuthWallController extends StatelessWidget {
     if(context.watch<AuthWallNotifier>().defaultRouteIsAuthorized) {
       return context.watch<AuthWallNotifier>().rootWidget;
     }
+
     return context
         .watch<AuthWallNotifier>().unauthorizedWidget;
   }

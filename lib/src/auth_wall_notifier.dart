@@ -27,8 +27,6 @@ class AuthWallNotifier extends ChangeNotifier {
   bool get resetRootRouteOnAnyUnAuthorized =>
       appConf[AuthWallConfProperty.resetRootRouteOnAnyUnAuthorized];
 
-  ///
-  String get defaultRouteName => appConf[AuthWallConfProperty.defaultRouteName];
 
   ///
   String get defaultHelpText => appConf[AuthWallConfProperty.defaultHelpText];
@@ -101,7 +99,8 @@ class AuthWallNotifier extends ChangeNotifier {
     _isSupported = await _auth.isDeviceSupported();
 
     if (autoAuthRootRoute) {
-      await authorizeRoute(defaultRouteName, defaultHelpText);
+      await authorizeRoute(AuthWallDefaultStates.defaultRoute.toString(),
+          defaultHelpText);
     }
     _isReady = true;
     notifyListeners();
@@ -141,21 +140,21 @@ class AuthWallNotifier extends ChangeNotifier {
 
   ///
   Widget get rootWidget =>
-      stateWallWidgets[defaultRouteName] ?? DefaultUnAuthorizedWidget();
+      stateWallWidgets[AuthWallDefaultStates.defaultRoute] ?? DefaultUnAuthorizedWidget();
 
   ///
   Widget get unsupportedWidget =>
-      stateWallWidgets[AuthWallDefaultStates.unsupported.toString()] ??
+      stateWallWidgets[AuthWallDefaultStates.unsupported] ??
       DefaultUnsupportedWidget();
 
   ///
   Widget get unauthorizedWidget =>
-      stateWallWidgets[AuthWallDefaultStates.unauthorized.toString()] ??
+      stateWallWidgets[AuthWallDefaultStates.unauthorized] ??
       DefaultUnAuthorizedWidget();
 
   ///
   Widget get bootingWidget =>
-      stateWallWidgets[AuthWallDefaultStates.booting.toString()] ??
+      stateWallWidgets[AuthWallDefaultStates.booting] ??
       DefaultOnBootingWidget();
 
   ///
