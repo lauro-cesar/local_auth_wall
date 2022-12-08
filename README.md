@@ -60,6 +60,10 @@ package="com.example.app">
 
 
 
+In this example we use MaterialApp.builder to encapsulate all your app routes bellow our
+ChangeNotifierProvider, so anytime its possible to call: context.read<AuthWallNotifier>().routeIsAuthorized(routeName) to 
+check for the authorization state 
+
 
 ```
 import 'package:flutter/material.dart';
@@ -100,7 +104,7 @@ class NotAuthorizedState extends StatelessWidget {
   }
 }
 
-///
+/// Widget to show while checking for requeriments..
 class OnBootState extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
