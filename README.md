@@ -60,7 +60,7 @@ package="com.example.app">
 
 
 
-In this example we use MaterialApp.builder to encapsulate all your app routes bellow our
+In this example we use MaterialApp.builder to encapsulate all app routes bellow our
 ChangeNotifierProvider, so anytime its possible to call ```context.read<AuthWallNotifier>().
 routeIsAuthorized(routeName)```  to 
 check for the authorization state.
