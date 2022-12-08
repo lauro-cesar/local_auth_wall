@@ -10,10 +10,31 @@ import 'package:local_auth/local_auth.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../local_auth_wall.dart';
+import 'default_booting_widget.dart';
+import 'default_unauthorized_widget.dart';
+import 'default_unsupported_widget.dart';
+
 ///
 class AuthWallNotifier extends ChangeNotifier {
   ///
   final String keyName;
+
+  ///
+  final Map<AuthWallConfProperty, dynamic> appConf;
+
+  ///
+  bool get resetRootRouteOnAnyUnAuthorized =>
+      appConf[AuthWallConfProperty.resetRootRouteOnAnyUnAuthorized];
+
+  ///
+  String get defaultRouteName => appConf[AuthWallConfProperty.defaultRouteName];
+
+  ///
+  String get defaultHelpText => appConf[AuthWallConfProperty.defaultHelpText];
+
+  ///
+  bool get autoAuthRootRoute => appConf[AuthWallConfProperty.autoAuthRootRoute];
 
   ///
   final bool? writeToLocalStorage;
@@ -53,11 +74,6 @@ class AuthWallNotifier extends ChangeNotifier {
   final Map<String, Widget> initialStateWallWidgets;
 
   ///
-  final String defaultRouteName;
-  final String defaultHelpText;
-  ///
-  final bool autoAuthRootRoute;
-  ///
   UnmodifiableMapView<String, dynamic> get instanceMap =>
       UnmodifiableMapView(_instanceMap);
 
@@ -68,10 +84,8 @@ class AuthWallNotifier extends ChangeNotifier {
       this.debugMode,
       this.keepKeys,
       this.excludeKeys,
-        required this.defaultHelpText,
-        required this.autoAuthRootRoute,
-        required this.defaultRouteName,
-        required this.initialStateWallWidgets,
+      required this.appConf,
+      required this.initialStateWallWidgets,
       this.autoNotify}) {
     ;
     reloadMap().then((_) => {
@@ -83,14 +97,14 @@ class AuthWallNotifier extends ChangeNotifier {
   Future<void> onBoot() async {
     _authorizedRoutes = {};
     _stateWallWidgets.addAll(initialStateWallWidgets);
+    notifyListeners();
     _isSupported = await _auth.isDeviceSupported();
 
-    if(autoAuthRootRoute){
+    if (autoAuthRootRoute) {
       await authorizeRoute(defaultRouteName, defaultHelpText);
     }
     _isReady = true;
     notifyListeners();
-
   }
 
   ///
@@ -118,12 +132,33 @@ class AuthWallNotifier extends ChangeNotifier {
 
   List<BiometricType>? _availableBiometrics;
 
-
   ///
   Map<String, Widget> _stateWallWidgets = {};
+
   ///
   ///
   Map<String, Widget> get stateWallWidgets => _stateWallWidgets;
+
+  ///
+  Widget get rootWidget =>
+      stateWallWidgets[defaultRouteName] ?? DefaultUnAuthorizedWidget();
+
+  ///
+  Widget get unsupportedWidget =>
+      stateWallWidgets[AuthWallDefaultStates.unsupported.toString()] ??
+      DefaultUnsupportedWidget();
+
+  ///
+  Widget get unauthorizedWidget =>
+      stateWallWidgets[AuthWallDefaultStates.unauthorized.toString()] ??
+          DefaultUnAuthorizedWidget();
+
+
+
+  ///
+  Widget get bootingWidget =>
+      stateWallWidgets[AuthWallDefaultStates.booting.toString()] ??
+      DefaultOnBootingWidget();
 
   ///
   Future<void> onRegisterWallWidget(Map<String, Widget> widgets) async {
@@ -139,7 +174,6 @@ class AuthWallNotifier extends ChangeNotifier {
   ///
   bool get defaultRouteIsAuthorized => routeIsAuthorized(defaultRouteName);
 
-
   ///
   bool routeIsAuthorized(String route) {
     return _authorizedRoutes[route] ?? false;
@@ -148,20 +182,24 @@ class AuthWallNotifier extends ChangeNotifier {
   ///
   Future<void> authorizeRoute(String route,
       [String reason = "Autorização necessária"]) async {
-
-
-    if(isSupported){
+    if (isSupported) {
       await askLocalAuth();
-      _authorizedRoutes[route] = await auth.authenticate(
+      var success = await auth.authenticate(
         localizedReason: reason,
         options: const AuthenticationOptions(
           stickyAuth: true,
         ),
       );
+
+      if (success) {
+        _authorizedRoutes[route] = success;
+      } else {
+        if(resetRootRouteOnAnyUnAuthorized){
+          _authorizedRoutes.clear();
+        }
+      }
       await dismissLocalAuth();
     }
-
-
   }
 
   ///
