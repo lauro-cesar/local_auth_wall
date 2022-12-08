@@ -62,7 +62,10 @@ package="com.example.app">
 
 In this example we use MaterialApp.builder to encapsulate all your app routes bellow our
 ChangeNotifierProvider, so anytime its possible to call: context.read<AuthWallNotifier>().routeIsAuthorized(routeName) to 
-check for the authorization state 
+check for the authorization state.
+
+However, you can use LocalAuthWall in any place, with the limitation that only widgets bellow 
+will be able to call ```context.read<AuthWallNotifier>().routeIsAuthorized(routeName)```
 
 
 ```
