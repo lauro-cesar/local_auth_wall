@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:collection';
 import 'dart:convert';
 import 'dart:core';
@@ -26,7 +25,6 @@ class AuthWallNotifier extends ChangeNotifier {
   ///
   bool get resetRootRouteOnAnyUnAuthorized =>
       appConf[AuthWallConfProperty.resetRootRouteOnAnyUnAuthorized];
-
 
   ///
   String get defaultHelpText => appConf[AuthWallConfProperty.defaultHelpText];
@@ -99,8 +97,8 @@ class AuthWallNotifier extends ChangeNotifier {
     _isSupported = await _auth.isDeviceSupported();
 
     if (autoAuthRootRoute) {
-      await authorizeRoute(AuthWallDefaultStates.defaultRoute.toString(),
-          defaultHelpText);
+      await authorizeRoute(
+          AuthWallDefaultStates.defaultRoute.toString(), defaultHelpText);
     }
     _isReady = true;
     notifyListeners();
@@ -118,21 +116,13 @@ class AuthWallNotifier extends ChangeNotifier {
   bool get isReady => _isReady;
 
   ///
-  bool _canCheckBiometrics = true;
-
-  ///
-  bool get canCheckBiometrics => _canCheckBiometrics;
-
-  ///
   bool _isSupported = false;
 
   ///
   bool get isSupported => _isSupported;
 
-  List<BiometricType>? _availableBiometrics;
-
   ///
-  Map<AuthWallDefaultStates, Widget> _stateWallWidgets = {};
+  late Map<AuthWallDefaultStates, Widget> _stateWallWidgets;
 
   ///
   ///
@@ -140,7 +130,8 @@ class AuthWallNotifier extends ChangeNotifier {
 
   ///
   Widget get rootWidget =>
-      stateWallWidgets[AuthWallDefaultStates.defaultRoute] ?? DefaultUnAuthorizedWidget();
+      stateWallWidgets[AuthWallDefaultStates.defaultRoute] ??
+      DefaultUnAuthorizedWidget();
 
   ///
   Widget get unsupportedWidget =>
@@ -170,8 +161,8 @@ class AuthWallNotifier extends ChangeNotifier {
   Map<String, bool> get authorizedRoutes => _authorizedRoutes;
 
   ///
-  bool get defaultRouteIsAuthorized => routeIsAuthorized
-    (AuthWallDefaultStates.defaultRoute.toString());
+  bool get defaultRouteIsAuthorized =>
+      routeIsAuthorized(AuthWallDefaultStates.defaultRoute.toString());
 
   ///
   bool routeIsAuthorized(String route) {
@@ -200,12 +191,6 @@ class AuthWallNotifier extends ChangeNotifier {
       await dismissLocalAuth();
     }
   }
-
-  ///
-  String _authorized = 'Not Authorized';
-
-  ///
-  bool _isAuthenticating = false;
 
   ///
   bool _showLocalAuth = false;

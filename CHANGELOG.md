@@ -3,3 +3,6 @@
 * First release with example.
 
 
+## [0.0.3] - 12/08/22
+
+* Added full example.

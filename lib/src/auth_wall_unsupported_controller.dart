@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
-import '../local_auth_wall.dart';
 import 'auth_wall_controller.dart';
 import 'auth_wall_notifier.dart';
-import 'default_unsupported_widget.dart';
 
 
 ///

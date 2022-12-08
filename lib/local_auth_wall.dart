@@ -1,11 +1,8 @@
 library local_auth_wall;
-
 import 'package:flutter/material.dart';
-import 'package:local_auth_wall/src/auth_wall_boot_controller.dart';
 import 'package:provider/provider.dart';
-
+import '/src/auth_wall_boot_controller.dart';
 import '/src/auth_wall_notifier.dart';
-import 'src/auth_wall_controller.dart';
 
 
 ///
