@@ -71,7 +71,7 @@ class AuthWallNotifier extends ChangeNotifier {
   final Map<String, dynamic> _instanceMap = {};
 
   ///
-  final Map<String, Widget> initialStateWallWidgets;
+  final Map<AuthWallDefaultStates, Widget> initialStateWallWidgets;
 
   ///
   UnmodifiableMapView<String, dynamic> get instanceMap =>
@@ -133,11 +133,11 @@ class AuthWallNotifier extends ChangeNotifier {
   List<BiometricType>? _availableBiometrics;
 
   ///
-  Map<String, Widget> _stateWallWidgets = {};
+  Map<AuthWallDefaultStates, Widget> _stateWallWidgets = {};
 
   ///
   ///
-  Map<String, Widget> get stateWallWidgets => _stateWallWidgets;
+  Map<AuthWallDefaultStates, Widget> get stateWallWidgets => _stateWallWidgets;
 
   ///
   Widget get rootWidget =>
@@ -151,9 +151,7 @@ class AuthWallNotifier extends ChangeNotifier {
   ///
   Widget get unauthorizedWidget =>
       stateWallWidgets[AuthWallDefaultStates.unauthorized.toString()] ??
-          DefaultUnAuthorizedWidget();
-
-
+      DefaultUnAuthorizedWidget();
 
   ///
   Widget get bootingWidget =>
@@ -161,7 +159,8 @@ class AuthWallNotifier extends ChangeNotifier {
       DefaultOnBootingWidget();
 
   ///
-  Future<void> onRegisterWallWidget(Map<String, Widget> widgets) async {
+  Future<void> onRegisterWallWidget(
+      Map<AuthWallDefaultStates, Widget> widgets) async {
     _stateWallWidgets.addAll(widgets);
     notifyListeners();
   }
@@ -172,7 +171,8 @@ class AuthWallNotifier extends ChangeNotifier {
   Map<String, bool> get authorizedRoutes => _authorizedRoutes;
 
   ///
-  bool get defaultRouteIsAuthorized => routeIsAuthorized(defaultRouteName);
+  bool get defaultRouteIsAuthorized => routeIsAuthorized
+    (AuthWallDefaultStates.defaultRoute.toString());
 
   ///
   bool routeIsAuthorized(String route) {
@@ -194,7 +194,7 @@ class AuthWallNotifier extends ChangeNotifier {
       if (success) {
         _authorizedRoutes[route] = success;
       } else {
-        if(resetRootRouteOnAnyUnAuthorized){
+        if (resetRootRouteOnAnyUnAuthorized) {
           _authorizedRoutes.clear();
         }
       }

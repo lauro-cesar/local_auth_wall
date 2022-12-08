@@ -91,8 +91,6 @@ class NotSupportedState extends StatelessWidget {
 }
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
-  final String defaultRouteName = "root";
 
   @override
   Widget build(BuildContext context) {
@@ -104,16 +102,15 @@ class MyApp extends StatelessWidget {
                   "access.",
               AuthWallConfProperty.autoAuthRootRoute: true,
               AuthWallConfProperty.resetRootRouteOnAnyUnAuthorized: false,
-              AuthWallConfProperty.defaultRouteName: defaultRouteName,
             },
             stateWallWidgets: {
-              "${AuthWallDefaultStates.booting}": OnBootState(),
-              "${AuthWallDefaultStates.unauthorized}": NotAuthorizedState(),
-              "${AuthWallDefaultStates.unsupported}": NotSupportedState(),
+              AuthWallDefaultStates.booting: OnBootState(),
+              AuthWallDefaultStates.unauthorized: NotAuthorizedState(),
+              AuthWallDefaultStates.unsupported: NotSupportedState(),
               /// child here provided by Flutter MaterialApp, normally the
               /// home route, in this case: MyHomePage
               /// root must match defaultRouteName
-              defaultRouteName: child ??
+              AuthWallDefaultStates.defaultRoute: child ??
                   Container(
                     alignment: Alignment.center,
                     color: Colors.amber,

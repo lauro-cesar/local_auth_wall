@@ -73,7 +73,7 @@ will be able to call ```context.read<AuthWallNotifier>().routeIsAuthorized(route
 
 ```dart 
 
- MaterialApp(
+MaterialApp(
         builder: (BuildContext, child) {
           return LocalAuthWall(
             appConf: {
@@ -81,16 +81,15 @@ will be able to call ```context.read<AuthWallNotifier>().routeIsAuthorized(route
                   "access.",
               AuthWallConfProperty.autoAuthRootRoute: true,
               AuthWallConfProperty.resetRootRouteOnAnyUnAuthorized: false,
-              AuthWallConfProperty.defaultRouteName: defaultRouteName,
             },
             stateWallWidgets: {
-              "${AuthWallDefaultStates.booting}": OnBootState(),
-              "${AuthWallDefaultStates.unauthorized}": NotAuthorizedState(),
-              "${AuthWallDefaultStates.unsupported}": NotSupportedState(),
+              AuthWallDefaultStates.booting: OnBootState(),
+              AuthWallDefaultStates.unauthorized: NotAuthorizedState(),
+              AuthWallDefaultStates.unsupported: NotSupportedState(),
               /// child here provided by Flutter MaterialApp, normally the
               /// home route, in this case: MyHomePage
               /// root must match defaultRouteName
-              defaultRouteName: child ??
+              AuthWallDefaultStates.defaultRoute: child ??
                   Container(
                     alignment: Alignment.center,
                     color: Colors.amber,
@@ -204,52 +203,38 @@ class NotSupportedState extends StatelessWidget {
 
 class MyApp extends StatelessWidget {
   /// String to define the defaultRoute (Anytime wee can use context.read<AuthWallNotifier>().routeIsAuthorized(routeName) to check the authorization state (bool)
-
-  final String defaultRouteName = "root";
-
+  
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
         builder: (BuildContext, child) {
           return LocalAuthWall(
-          /// minimal set of conf required, this way is           
             appConf: {
-              AuthWallConfProperty.defaultHelpText:"Please, authorize to "
+              AuthWallConfProperty.defaultHelpText: "Please, authorize to "
                   "access.",
-              AuthWallConfProperty.autoAuthRootRoute:true,
-              AuthWallConfProperty.resetRootRouteOnAnyUnAuthorized:false,
-              AuthWallConfProperty.defaultRouteName:defaultRouteName,
+              AuthWallConfProperty.autoAuthRootRoute: true,
+              AuthWallConfProperty.resetRootRouteOnAnyUnAuthorized: false,
             },
             stateWallWidgets: {
-            /// A nice Widget to show while checking for hardware support...
-              "${AuthWallDefaultStates.booting}":OnBootState(),
-              /// A nice Widget to show if Authorized.
-              "${AuthWallDefaultStates.unauthorized}":NotAuthorizedState(),
-              /// A nice Widget to show when local_auth its unsupported. 
-              "${AuthWallDefaultStates.unsupported}":NotSupportedState(),
+              AuthWallDefaultStates.booting: OnBootState(),
+              AuthWallDefaultStates.unauthorized: NotAuthorizedState(),
+              AuthWallDefaultStates.unsupported: NotSupportedState(),
               /// child here provided by Flutter MaterialApp, normally the
               /// home route, in this case: MyHomePage
               /// root must match defaultRouteName
-              defaultRouteName:child ?? Container(
-                alignment: Alignment.center,
-                color: Colors.amber,
-                child: Text("Something is wrong, "
-                  "where is my Home Widget??"),)
+              AuthWallDefaultStates.defaultRoute: child ??
+                  Container(
+                    alignment: Alignment.center,
+                    color: Colors.amber,
+                    child: Text("Something is wrong, "
+                        "where is my Home Widget??"),
+                  )
             },
           );
         },
         title: 'Flutter Demo',
         theme: ThemeData(
-          // This is the theme of your application.
-          //
-          // Try running your application with "flutter run". You'll see the
-          // application has a blue toolbar. Then, without quitting the app, try
-          // changing the primarySwatch below to Colors.green and then invoke
-          // "hot reload" (press "r" in the console where you ran "flutter run",
-          // or simply save your changes to "hot reload" in a Flutter IDE).
-          // Notice that the counter didn't reset back to zero; the application
-          // is not restarted.
           primarySwatch: Colors.blue,
         ),
         home: MyHomePage(title: 'Flutter Demo Home Page'));

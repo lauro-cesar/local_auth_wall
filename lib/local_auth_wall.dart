@@ -33,7 +33,9 @@ enum AuthWallDefaultStates  {
   ///
   unsupported,
   ///
-  unauthorized
+  unauthorized,
+  ///
+  defaultRoute
 }
 
 
@@ -42,7 +44,7 @@ class LocalAuthWall extends StatefulWidget {
 
 
   /// Register a set of widgets to be
-  final Map<String, Widget> stateWallWidgets;
+  final Map<AuthWallDefaultStates, Widget> stateWallWidgets;
 
   ///
   final Map<AuthWallConfProperty,dynamic> appConf;
