@@ -69,6 +69,49 @@ However, you can use LocalAuthWall in any place, with the limitation that only w
 will be able to call ```context.read<AuthWallNotifier>().routeIsAuthorized(routeName)```
 
 
+## Basic usage
+
+```dart 
+
+ MaterialApp(
+        builder: (BuildContext, child) {
+          return LocalAuthWall(
+            appConf: {
+              AuthWallConfProperty.defaultHelpText: "Please, authorize to "
+                  "access.",
+              AuthWallConfProperty.autoAuthRootRoute: true,
+              AuthWallConfProperty.resetRootRouteOnAnyUnAuthorized: false,
+              AuthWallConfProperty.defaultRouteName: defaultRouteName,
+            },
+            stateWallWidgets: {
+              "${AuthWallDefaultStates.booting}": OnBootState(),
+              "${AuthWallDefaultStates.unauthorized}": NotAuthorizedState(),
+              "${AuthWallDefaultStates.unsupported}": NotSupportedState(),
+              /// child here provided by Flutter MaterialApp, normally the
+              /// home route, in this case: MyHomePage
+              /// root must match defaultRouteName
+              defaultRouteName: child ??
+                  Container(
+                    alignment: Alignment.center,
+                    color: Colors.amber,
+                    child: Text("Something is wrong, "
+                        "where is my Home Widget??"),
+                  )
+            },
+          );
+        },
+        title: 'Flutter Demo',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+        home: MyHomePage(title: 'Flutter Demo Home Page'));
+
+
+```
+
+
+
+
 ```dart
 import 'package:flutter/material.dart';
 import 'package:local_auth_wall/local_auth_wall.dart';
