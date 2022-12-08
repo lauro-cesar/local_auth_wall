@@ -69,7 +69,7 @@ However, you can use LocalAuthWall in any place, with the limitation that only w
 will be able to call ```context.read<AuthWallNotifier>().routeIsAuthorized(routeName)```
 
 
-```
+```dart
 import 'package:flutter/material.dart';
 import 'package:local_auth_wall/local_auth_wall.dart';
 import 'package:local_auth_wall/src/auth_wall_notifier.dart';

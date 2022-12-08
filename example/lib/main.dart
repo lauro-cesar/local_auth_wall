@@ -7,7 +7,8 @@ import 'package:flutter/services.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitDown, DeviceOrientation.portraitUp]);
+  SystemChrome.setPreferredOrientations(
+      [DeviceOrientation.portraitDown, DeviceOrientation.portraitUp]);
 
   runApp(MyApp());
 }
@@ -17,6 +18,7 @@ class NotAuthorizedState extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        primary: false,
         body: Container(
           color: Colors.blue,
           alignment: Alignment.center,
@@ -25,14 +27,17 @@ class NotAuthorizedState extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text("Please authorize to access"),
-              TextButton(onPressed: () {
-                context.read<AuthWallNotifier>().authorizeRoute("root","pleas"
-                    "e authorize to access");
-              } , child: Icon(Icons.security))
+              TextButton(
+                  onPressed: () {
+                    context.read<AuthWallNotifier>().authorizeRoute(
+                        "root",
+                        "pleas"
+                            "e authorize to access");
+                  },
+                  child: Icon(Icons.security))
             ],
           ),
-        )
-    );
+        ));
   }
 }
 
@@ -41,6 +46,7 @@ class OnBootState extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        primary: false,
         body: Container(
           alignment: Alignment.center,
           child: Column(
@@ -48,22 +54,23 @@ class OnBootState extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text("Please wait, checking for hardware support  "),
-              TextButton(onPressed: () {
-                ///Call here action here..
-              } , child: Icon(Icons.security))
+              TextButton(
+                  onPressed: () {
+                    ///Call here action here..
+                  },
+                  child: Icon(Icons.security))
             ],
           ),
-        )
-    );
+        ));
   }
 }
-
 
 /// Widget to show when hardware requirements not meet...
 class NotSupportedState extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        primary: false,
         body: Container(
           alignment: Alignment.center,
           child: Column(
@@ -72,22 +79,20 @@ class NotSupportedState extends StatelessWidget {
             children: [
               Text("Sorry, this device is not supported, please, auth using "
                   "the below alternative."),
-              TextButton(onPressed: () {
-               ///Call here...
-              } , child: Icon(Icons.security))
+              TextButton(
+                  onPressed: () {
+                    ///Call here...
+                  },
+                  child: Icon(Icons.security))
             ],
           ),
-        )
-    );
+        ));
   }
 }
-
-
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   final String defaultRouteName = "root";
-
 
   @override
   Widget build(BuildContext context) {
@@ -95,24 +100,27 @@ class MyApp extends StatelessWidget {
         builder: (BuildContext, child) {
           return LocalAuthWall(
             appConf: {
-              AuthWallConfProperty.defaultHelpText:"Please, authorize to "
+              AuthWallConfProperty.defaultHelpText: "Please, authorize to "
                   "access.",
-              AuthWallConfProperty.autoAuthRootRoute:true,
-              AuthWallConfProperty.resetRootRouteOnAnyUnAuthorized:false,
-              AuthWallConfProperty.defaultRouteName:defaultRouteName,
+              AuthWallConfProperty.autoAuthRootRoute: true,
+              AuthWallConfProperty.resetRootRouteOnAnyUnAuthorized: false,
+              AuthWallConfProperty.defaultRouteName: defaultRouteName,
             },
             stateWallWidgets: {
-              "${AuthWallDefaultStates.booting}":OnBootState(),
-              "${AuthWallDefaultStates.unauthorized}":NotAuthorizedState(),
-              "${AuthWallDefaultStates.unsupported}":NotSupportedState(),
+              "${AuthWallDefaultStates.booting}": OnBootState(),
+              "${AuthWallDefaultStates.unauthorized}": NotAuthorizedState(),
+              "${AuthWallDefaultStates.unsupported}": NotSupportedState(),
+
               /// child here provided by Flutter MaterialApp, normally the
               /// home route, in this case: MyHomePage
               /// root must match defaultRouteName
-              defaultRouteName:child ?? Container(
-                alignment: Alignment.center,
-                color: Colors.amber,
-                child: Text("Something is wrong, "
-                  "where is my Home Widget??"),)
+              defaultRouteName: child ??
+                  Container(
+                    alignment: Alignment.center,
+                    color: Colors.amber,
+                    child: Text("Something is wrong, "
+                        "where is my Home Widget??"),
+                  )
             },
           );
         },
@@ -132,16 +140,6 @@ class MyApp extends StatelessWidget {
         home: MyHomePage(title: 'Flutter Demo Home Page'));
   }
 }
-
-
-
-
-
-
-
-
-
-
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key? key, this.title}) : super(key: key);
@@ -233,8 +231,10 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          context.read<AuthWallNotifier>().authorizeRoute("comprar_item","Por"
-              " favor autorize a transação");
+          context.read<AuthWallNotifier>().authorizeRoute(
+              "comprar_item",
+              "Por"
+                  " favor autorize a transação");
         },
         tooltip: 'Increment',
         child: Icon(Icons.add),
