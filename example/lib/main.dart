@@ -23,7 +23,8 @@ class MyApp extends StatelessWidget {
             defaultRouteName: "root",
             defaultHelpText: "Por favor, autorize o acesso ao app.",
             stateWallWidgets: {
-              "not_authorized":NotAuthorizedState(),
+              "${AuthWallState.unauthorized}":NotAuthorizedState(),
+              "${AuthWallState.unsupported}":NotSupportedState(),
               "root":child ?? Container(
                 alignment: Alignment.center,
                 color: Colors.amber,
@@ -48,6 +49,34 @@ class MyApp extends StatelessWidget {
         home: MyHomePage(title: 'Flutter Demo Home Page'));
   }
 }
+
+
+
+
+
+class NotSupportedState extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        body: Container(
+          alignment: Alignment.center,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text("Please authorize root route"),
+              TextButton(onPressed: () {
+                context.read<AuthWallNotifier>().authorizeRoute("root");
+
+              } , child: Icon(Icons.security))
+            ],
+          ),
+        )
+    );
+  }
+}
+
+
 
 class NotAuthorizedState extends StatelessWidget {
   @override

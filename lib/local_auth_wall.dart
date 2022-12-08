@@ -7,6 +7,21 @@ import '/src/auth_wall_notifier.dart';
 import 'src/auth_wall_controller.dart';
 
 ///
+enum AuthWallState  {
+  ///
+  authorized,
+  ///
+  unknown,
+  ///
+  supported,
+  ///
+  unsupported,
+  ///
+  unauthorized
+}
+
+
+///
 class LocalAuthWall extends StatefulWidget {
   ///
   final String defaultRouteName;

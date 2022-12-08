@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../local_auth_wall.dart';
 import 'auth_wall_notifier.dart';
 
 ///
@@ -23,7 +24,7 @@ class AuthWallController extends StatelessWidget {
                   Container()
               : context
                       .watch<AuthWallNotifier>()
-                      .stateWallWidgets["not_authorized"] ??
+                      .stateWallWidgets[AuthWallState.unauthorized] ??
                   Container(
                     color: Colors.red,
                     child: Column(
