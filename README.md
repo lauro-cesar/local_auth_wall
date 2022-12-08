@@ -202,9 +202,7 @@ class NotSupportedState extends StatelessWidget {
 
 
 class MyApp extends StatelessWidget {
-  /// String to define the defaultRoute (Anytime wee can use context.read<AuthWallNotifier>().routeIsAuthorized(routeName) to check the authorization state (bool)
   
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
