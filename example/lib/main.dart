@@ -32,7 +32,7 @@ class NotAuthorizedState extends StatelessWidget {
                     context.read<AuthWallNotifier>().authorizeRoute(
                         AuthWallDefaultStates.defaultRoute.toString(),
                         "pleas"
-                            "e authorize to access");
+                        "e authorize to access");
                   },
                   child: Icon(Icons.security))
             ],
@@ -68,7 +68,7 @@ class NotSupportedState extends StatelessWidget {
     return Scaffold(
         primary: false,
         body: Container(
-          color:Colors.blue,
+          color: Colors.blue,
           alignment: Alignment.center,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -88,7 +88,6 @@ class NotSupportedState extends StatelessWidget {
 }
 
 class MyApp extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -104,6 +103,7 @@ class MyApp extends StatelessWidget {
               AuthWallDefaultStates.booting: OnBootState(),
               AuthWallDefaultStates.unauthorized: NotAuthorizedState(),
               AuthWallDefaultStates.unsupported: NotSupportedState(),
+
               /// child here provided by Flutter MaterialApp, normally the
               /// home route, in this case: MyHomePage
               AuthWallDefaultStates.defaultRoute: child ??
@@ -148,20 +148,16 @@ class _MyHomePageState extends State<MyHomePage> {
           children: <Widget>[
             TextButton(
                 onPressed: () {
-                  context.read<AuthWallNotifier>().authorizeRoute
-                    (AuthWallDefaultStates.defaultRoute.toString());
+                  context.read<AuthWallNotifier>().authorizeRoute(
+                      AuthWallDefaultStates.defaultRoute.toString());
                 },
                 child: Text(" Tap to authorize Default Route")),
             Text(
-              'Default Route authorized: ${context.watch<AuthWallNotifier>()
-                  .routeIsAuthorized
-                (AuthWallDefaultStates.defaultRoute.toString())}',
+              'Default Route authorized: ${context.watch<AuthWallNotifier>().routeIsAuthorized(AuthWallDefaultStates.defaultRoute.toString())}',
             ),
             Text(
-              'Hardware supported: ${context.watch<AuthWallNotifier>()
-                  .isSupported}',
+              'Hardware supported: ${context.watch<AuthWallNotifier>().isSupported}',
             ),
-
             Text(
               '$_counter',
               style: Theme.of(context).textTheme.headline4,
@@ -171,63 +167,65 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          context.read<AuthWallNotifier>().authorizeRoute(
-              "show_ballance",
-              "Please, authorize to see wallet balance").then((_) {
-                if(context.read<AuthWallNotifier>().routeIsAuthorized
-                  ("show_ballance")){
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    backgroundColor: Colors.green,
-                    elevation: 4,
-                    dismissDirection: DismissDirection.down,
-                    content: SizedBox(
-                      height: 60,
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Icon(Icons.security),
-                          ),
-                          Expanded(
-                            child: Text(
-                              "Nice, authorized with sucess!", style: TextStyle
-                              (fontSize:
-                            18),),
-                          )
-                        ],
+          context
+              .read<AuthWallNotifier>()
+              .authorizeRoute(
+                  "show_ballance", "Please, authorize to see wallet balance")
+              .then((_) {
+            if (context
+                .read<AuthWallNotifier>()
+                .routeIsAuthorized("show_ballance")) {
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                backgroundColor: Colors.green,
+                elevation: 4,
+                dismissDirection: DismissDirection.down,
+                content: SizedBox(
+                  height: 60,
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Icon(Icons.security),
                       ),
-                    ),));
-
-
-                } else {
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    backgroundColor: Colors.red,
-                    elevation: 4,
-                    dismissDirection: DismissDirection.down,
-                    content: SizedBox(
-                      height: 60,
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Icon(Icons.security),
-                          ),
-                          Expanded(
-                            child: Text(
-                              "Sorry, NOT authorized with sucess!", style:
-                            TextStyle
-                              (fontSize:
-                            18),),
-                          )
-                        ],
+                      Expanded(
+                        child: Text(
+                          "Nice, authorized with sucess!",
+                          style: TextStyle(fontSize: 18),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ));
+            } else {
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                backgroundColor: Colors.red,
+                elevation: 4,
+                dismissDirection: DismissDirection.down,
+                content: SizedBox(
+                  height: 60,
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Icon(Icons.security),
                       ),
-                    ),));
-                }
-          } );
+                      Expanded(
+                        child: Text(
+                          "Sorry, NOT authorized with sucess!",
+                          style: TextStyle(fontSize: 18),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ));
+            }
+          });
         },
         tooltip: 'Balance',
         child: Icon(Icons.balance),

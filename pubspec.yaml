@@ -1,6 +1,6 @@
 name: local_auth_wall
 description: Local Auth wall redirect user to a widget when  authenticated and another if not.
-version: 0.0.4
+version: 1.0.0
 homepage: https://github.com/lauro-cesar
 repository: https://github.com/lauro-cesar/local_auth_wall
 
@@ -27,6 +27,7 @@ dev_dependencies:
     sdk: flutter
   integration_test:
     sdk: flutter
+  lints: ^2.0.1
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

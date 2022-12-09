@@ -47,17 +47,19 @@ class AuthWallNotifier extends ChangeNotifier {
   ///
   final List<String>? excludeKeys;
 
+  ///
   List<String> get _keepKeys {
     return keepKeys ?? [];
   }
 
+  ///
   List<String> get _excludeKeys {
     return excludeKeys ?? [];
   }
 
   ///
   String? getStringKey(String key) {
-    return instanceMap[key] ?? null;
+    return instanceMap[key];
   }
 
   ///
@@ -83,7 +85,6 @@ class AuthWallNotifier extends ChangeNotifier {
       required this.appConf,
       required this.initialStateWallWidgets,
       this.autoNotify}) {
-    ;
     reloadMap().then((_) => {
           if (autoNotify ?? true) {notifyListeners()}
         });
@@ -112,6 +113,7 @@ class AuthWallNotifier extends ChangeNotifier {
   ///
   LocalAuthentication get auth => _auth;
 
+  ///
   bool _isReady = false;
 
   ///
@@ -157,6 +159,7 @@ class AuthWallNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
+  ///
   late Map<String, bool> _authorizedRoutes;
 
   ///
@@ -214,6 +217,7 @@ class AuthWallNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
+  ///
   Future<Map<String, dynamic>> _onComputeJson(String inputData) async {
     return jsonDecode(inputData);
   }
@@ -244,7 +248,7 @@ class AuthWallNotifier extends ChangeNotifier {
   ///
   Future<File> saveData(String data, String filename) async {
     final file = await outPutFile(filename);
-    await file.writeAsString('$data');
+    await file.writeAsString(data);
     return file;
   }
 
@@ -311,26 +315,28 @@ class AuthWallNotifier extends ChangeNotifier {
   ///
   Future<void> removeAll() async {
     ///
-    var _writeMap = {};
+    var writeMap = {};
 
     for (var key in _keepKeys) {
-      _writeMap.addAll(_instanceMap[key]);
+      writeMap.addAll(_instanceMap[key]);
       if (debugMode ?? false) {
         print("keeping key: $key");
       }
     }
     _instanceMap.clear();
     _instanceMap.addAll(_initialMap);
-    _instanceMap.addAll(_writeMap.cast());
+    _instanceMap.addAll(writeMap.cast());
     _saveAppState().then((value) => {notifyListeners()});
   }
 
+  ///
   Future<void> _loadAppState() async {
     if (writeToLocalStorage ?? true) {
+      ///
       var sharedPrefs = await SharedPreferences.getInstance();
       if (sharedPrefs.containsKey(keyName)) {
         _instanceMap
-            .addAll(jsonDecode(sharedPrefs.getString('$keyName').toString()));
+            .addAll(jsonDecode(sharedPrefs.getString(keyName).toString()));
       } else {
         _instanceMap.addAll(_initialMap);
       }
@@ -342,18 +348,21 @@ class AuthWallNotifier extends ChangeNotifier {
     }
   }
 
+  ///
   Future<void> _saveAppState() async {
     if (writeToLocalStorage ?? true) {
+      ///
       var sharedPrefs = await SharedPreferences.getInstance();
-      var _writeMap = {};
-      _writeMap.addAll(_instanceMap);
+      ///
+      var writeMap = {};
+      writeMap.addAll(_instanceMap);
       for (var key in _excludeKeys) {
-        _writeMap.remove(key);
+        writeMap.remove(key);
         if (debugMode ?? false) {
           print("Removing key: $key");
         }
       }
-      await sharedPrefs.setString('$keyName', jsonEncode(_writeMap));
+      await sharedPrefs.setString(keyName, jsonEncode(writeMap));
     } else {
       if (debugMode ?? false) {
         print("not write");

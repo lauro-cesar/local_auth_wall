@@ -13,7 +13,9 @@ class AuthWallOverlayController extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: [
+        ///
         AuthWallBootController(),
+        ///
         AnimatedPositioned(
             right: 0,
             left: 0,
@@ -23,6 +25,7 @@ class AuthWallOverlayController extends StatelessWidget {
             bottom: 0,
             duration: Duration(milliseconds: 400),
             curve: Curves.easeInOutQuad,
+            ///
             child: Container(
               color: Colors.black.withOpacity(0.5),
               alignment: Alignment.bottomCenter,
@@ -33,6 +36,7 @@ class AuthWallOverlayController extends StatelessWidget {
                   alignment: Alignment.center,
                   child: Column(
                     children: [
+                      ///
                       SizedBox(
                         height: 48,
                         width: 48,
@@ -41,6 +45,7 @@ class AuthWallOverlayController extends StatelessWidget {
                           child: CircularProgressIndicator(),
                         ),
                       ),
+                      ///
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: IconButton(
