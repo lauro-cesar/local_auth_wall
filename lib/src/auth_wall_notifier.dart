@@ -353,6 +353,7 @@ class AuthWallNotifier extends ChangeNotifier {
     if (writeToLocalStorage ?? true) {
       ///
       var sharedPrefs = await SharedPreferences.getInstance();
+
       ///
       var writeMap = {};
       writeMap.addAll(_instanceMap);

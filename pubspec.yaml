@@ -1,6 +1,6 @@
 name: local_auth_wall
 description: Local Auth wall redirect user to a widget when  authenticated and another if not.
-version: 1.0.0
+version: 1.0.1
 homepage: https://github.com/lauro-cesar
 repository: https://github.com/lauro-cesar/local_auth_wall
 

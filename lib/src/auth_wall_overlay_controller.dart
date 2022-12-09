@@ -15,6 +15,7 @@ class AuthWallOverlayController extends StatelessWidget {
       children: [
         ///
         AuthWallBootController(),
+
         ///
         AnimatedPositioned(
             right: 0,
@@ -25,6 +26,7 @@ class AuthWallOverlayController extends StatelessWidget {
             bottom: 0,
             duration: Duration(milliseconds: 400),
             curve: Curves.easeInOutQuad,
+
             ///
             child: Container(
               color: Colors.black.withOpacity(0.5),
@@ -45,6 +47,7 @@ class AuthWallOverlayController extends StatelessWidget {
                           child: CircularProgressIndicator(),
                         ),
                       ),
+
                       ///
                       Padding(
                         padding: const EdgeInsets.all(8.0),

@@ -6,6 +6,8 @@ import 'package:provider/provider.dart';
 import '/src/auth_wall_notifier.dart';
 import '/src/auth_wall_overlay_controller.dart';
 
+export '/src/auth_wall_notifier.dart';
+
 ///
 enum AuthWallConfProperty {
   ///

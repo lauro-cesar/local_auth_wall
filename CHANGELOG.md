@@ -16,3 +16,8 @@
 
 * Fixed static analysis.
 * First Release tag v1.0.0
+
+
+## [1.0.1] - 12/09/22
+
+* Fixed static analysis.
